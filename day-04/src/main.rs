@@ -114,7 +114,7 @@ fn task_2(mut nums: Vec<u8>, boards: &Vec<Board>) {
     nums.reverse();
 
     // Get vector over board references
-    let mut boards: Vec<&Board> = boards.iter().map(|b| b).collect();
+    let mut boards: Vec<&Board> = boards.iter().collect();
     let mut drawn_numbers = HashSet::<u8>::with_capacity(nums.len());
 
     let mut last_num = *nums.last().unwrap();
