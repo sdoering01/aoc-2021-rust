@@ -22,6 +22,10 @@ fn task_1(input: Vec<i32>) {
     let diffs = std::iter::zip(&input, &input[1..]);
     let increases = diffs.filter(|(a, b)| b > a).count();
 
+    // Alternative using windows
+    // let diffs = input.windows(2);
+    // let increases = diffs.filter(|d| d[1] > d[0]).count();
+
     println!("Task 1: {}", increases);
 }
 
