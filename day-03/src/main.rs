@@ -45,8 +45,8 @@ fn task_1(entries: &Vec<Vec<u8>>) {
 }
 
 fn task_2(entries: &Vec<Vec<u8>>) {
-    let oxygen_rate = get_rate(&entries, |num_zeros, num_ones| num_ones >= num_zeros);
-    let co2_rate = get_rate(&entries, |num_zeros, num_ones| num_ones < num_zeros);
+    let oxygen_rate = get_rate(entries, |num_zeros, num_ones| num_ones >= num_zeros);
+    let co2_rate = get_rate(entries, |num_zeros, num_ones| num_ones < num_zeros);
 
     let result = oxygen_rate * co2_rate;
     println!("Task 2: {}", result);
