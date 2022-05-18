@@ -31,15 +31,14 @@ fn read_input() -> Result<Vec<PointPair>> {
 
 fn line_iter(&((x1, y1), (x2, y2)): &PointPair) -> impl Iterator<Item = Point> {
     fn coord_iter(c1: i32, c2: i32) -> Box<dyn Iterator<Item = i32>> {
-        if c1 < c2 {
-            Box::new(c1..=c2)
-        } else if c2 < c1 {
+        use std::cmp::Ordering;
+        match c1.cmp(&c2) {
+            Ordering::Less => Box::new(c1..=c2),
             // Ranges can't count down, so we construct it the other way around and reverse it.
-            Box::new((c2..=c1).rev())
-        } else {
-            // Assuming that the other coordinate's points aren't equal too. The other iterator
-            // will limit the elements of the zipped line iterator.
-            Box::new(std::iter::repeat(c1))
+            Ordering::Greater => Box::new((c2..=c1).rev()),
+            // Assuming that the other coordinate's points aren't equal too. The other coord
+            // iterator will limit the elements of the zipped line iterator.
+            Ordering::Equal => Box::new(std::iter::repeat(c1)),
         }
     }
 
@@ -49,7 +48,7 @@ fn line_iter(&((x1, y1), (x2, y2)): &PointPair) -> impl Iterator<Item = Point> {
     x_iter.zip(y_iter)
 }
 
-fn get_overlapping_points(line_points: &Vec<PointPair>, include_diagonals: bool) -> usize {
+fn get_overlapping_points(line_points: &[PointPair], include_diagonals: bool) -> usize {
     // use std::collections::HashMap;
     //
     // let mut point_map = HashMap::<Point, i32>::new();
@@ -89,12 +88,12 @@ fn get_overlapping_points(line_points: &Vec<PointPair>, include_diagonals: bool)
     num_overlapping_points
 }
 
-fn task_1(line_points: &Vec<PointPair>) {
+fn task_1(line_points: &[PointPair]) {
     let result = get_overlapping_points(line_points, false);
     println!("Task 1: {}", result);
 }
 
-fn task_2(line_points: &Vec<PointPair>) {
+fn task_2(line_points: &[PointPair]) {
     let result = get_overlapping_points(line_points, true);
     println!("Task 2: {}", result);
 }
