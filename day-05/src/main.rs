@@ -30,6 +30,8 @@ fn read_input() -> Result<Vec<PointPair>> {
 }
 
 fn line_iter(&((x1, y1), (x2, y2)): &PointPair) -> impl Iterator<Item = Point> {
+    // We have to use a trait object (Box<dyn ...>), because the specific types of the returned
+    // iterators differ depending on the input.
     fn coord_iter(c1: i32, c2: i32) -> Box<dyn Iterator<Item = i32>> {
         use std::cmp::Ordering;
         match c1.cmp(&c2) {
@@ -76,12 +78,17 @@ fn get_overlapping_points(line_points: &[PointPair], include_diagonals: bool) ->
         .iter()
         // Only evaluate horizontal and vertical lines, when `include_diagonals` is false.
         .filter(|((x1, y1), (x2, y2))| include_diagonals || x1 == x2 || y1 == y2)
-        .for_each(|point_pair| {
-            for (x, y) in line_iter(point_pair) {
-                let idx = (1000 * y + x) as usize;
-                map[idx] += 1;
-            }
+        // Even more declarative
+        .flat_map(line_iter)
+        .for_each(|(x, y)| {
+            map[(x + y * 1_000) as usize] += 1;
         });
+        // .for_each(|point_pair| {
+        //     for (x, y) in line_iter(point_pair) {
+        //         let idx = (1000 * y + x) as usize;
+        //         map[idx] += 1;
+        //     }
+        // });
 
     let num_overlapping_points = map.iter().filter(|num_points| **num_points > 1).count();
 
