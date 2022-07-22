@@ -19,7 +19,7 @@ fn task_1(input: Input) {
 
 fn task_2(input: Input) {
     let solution = "todo";
-    println!("Task 1: {}", solution);
+    println!("Task 2: {}", solution);
 }
 
 fn main() {
